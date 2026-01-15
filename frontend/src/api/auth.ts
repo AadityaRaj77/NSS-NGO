@@ -25,3 +25,7 @@ export const me = (token: string) => {
     },
   });
 };
+
+export const getMe = () => {
+  return api.get("/auth/me");
+};

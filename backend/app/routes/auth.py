@@ -38,11 +38,19 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
 async def login(payload: LoginRequest, db: AsyncSession = Depends(get_db)):
     q = await db.execute(select(User).where(User.email == payload.email))
     user = q.scalar_one_or_none()
-    if not user or not verify_password(payload.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
-    token = create_access_token({"sub": str(user.id), "role": user.role})
+    if not user or not verify_password(payload.password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
+    token = create_access_token({
+        "sub": user.email,   # ✅ EMAIL ONLY
+        "role": user.role
+    })
+
     return AuthResponse(access_token=token)
+
 
 @router.get("/me")
 async def me(current_user: User = Depends(get_current_user)):

@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { login, register } from "../api/auth";
-import { setToken } from "../utils/token";
+import { useState, useEffect } from "react";
+import { login, register, getMe } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,13 +8,17 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<"USER" | "ADMIN">("USER");
   const [adminKey, setAdminKey] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
       if (isLogin) {
         const res = await login(email, password);
-        setToken(res.data.access_token);
-        alert("Login successful");
+        localStorage.setItem("token", res.data.access_token);
+        const me = await getMe();
+
+        if (me.data.role === "ADMIN") navigate("/admin");
+        else navigate("/home");
       } else {
         await register(email, password, role, adminKey);
         alert("Registered successfully");
@@ -24,6 +28,19 @@ export default function Auth() {
       alert(err.response?.data?.detail || "Something went wrong");
     }
   };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    getMe()
+      .then((res) => {
+        if (res.data.role === "ADMIN") navigate("/admin");
+        else navigate("/home");
+      })
+      .catch(() => {
+        localStorage.removeItem("token");
+      });
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white">
