@@ -3,6 +3,9 @@ import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserHome from "./pages/UserHome";
 import RoleProtectedRoute from "./RoleProtectedRoute";
+import Profile from "./pages/Profile";
+import CreateCause from "./pages/CreateCause";
+import Causes from "./pages/Causes";
 
 export default function App() {
   return (
@@ -23,6 +26,30 @@ export default function App() {
           element={
             <RoleProtectedRoute allowed={["USER"]}>
               <UserHome />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <RoleProtectedRoute allowed={["USER"]}>
+              <Profile />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/createcause"
+          element={
+            <RoleProtectedRoute allowed={["ADMIN"]}>
+              <CreateCause />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/causes"
+          element={
+            <RoleProtectedRoute allowed={["USER"]}>
+              <Causes />
             </RoleProtectedRoute>
           }
         />

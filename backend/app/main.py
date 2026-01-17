@@ -2,6 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.auth import router as auth_router
 from app.routes.admin import router as admin_router
+from app.routes import profile
+from app.routes import admin_causes
+from app.routes import causes
+from app.routes import donations
 
 app = FastAPI()
 app.add_middleware(
@@ -14,6 +18,11 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(admin_router)
+app.include_router(profile.router)
+app.include_router(admin_causes.router)
+app.include_router(causes.router)
+app.include_router(donations.router)
+
 
 @app.get("/")
 def root():

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/token";
+import Navbar from "../components/Navbar";
 
 export default function UserHome() {
   const navigate = useNavigate();
@@ -10,7 +11,8 @@ export default function UserHome() {
   };
 
   return (
-    <div className="p-10">
+    <>
+      <Navbar role="USER" />
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-blue-900">User Home</h1>
 
@@ -23,6 +25,6 @@ export default function UserHome() {
       </div>
 
       <div className="mt-8 text-gray-600">Welcome to the NGO platform.</div>
-    </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { clearToken } from "../utils/token";
+import { logout } from "../utils/token";
 
 type Props = {
   role: "USER" | "ADMIN";
@@ -8,44 +8,67 @@ type Props = {
 export default function Navbar({ role }: Props) {
   const navigate = useNavigate();
 
-  const logout = () => {
-    clearToken();
-    navigate("/auth");
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   };
+
+  const btnClass =
+    "text-sm font-medium text-gray-700 hover:text-blue-600 transition";
 
   return (
     <div className="flex items-center justify-between px-6 py-4 bg-white shadow-sm">
-      <h1 className="text-xl font-bold text-blue-900">NGO Platform</h1>
+      <h1
+        className="cursor-pointer text-xl font-bold text-blue-900"
+        onClick={() => navigate(role === "ADMIN" ? "/admin" : "/home")}
+      >
+        NGO Platform
+      </h1>
 
       <div className="flex items-center gap-6">
+        {/* USER NAV */}
         {role === "USER" && (
           <>
-            <button onClick={() => navigate("/home")} className="nav-btn">
+            <button onClick={() => navigate("/home")} className={btnClass}>
               Home
             </button>
-            <button onClick={() => navigate("/donate")} className="nav-btn">
-              Donate
+
+            <button onClick={() => navigate("/causes")} className={btnClass}>
+              Causes
+            </button>
+
+            <button
+              onClick={() => navigate("/my-donations")}
+              className={btnClass}
+            >
+              My Donations
+            </button>
+
+            <button onClick={() => navigate("/profile")} className={btnClass}>
+              Profile
             </button>
           </>
         )}
 
+        {/* ADMIN NAV */}
         {role === "ADMIN" && (
           <>
-            <button onClick={() => navigate("/admin")} className="nav-btn">
+            <button onClick={() => navigate("/admin")} className={btnClass}>
               Dashboard
             </button>
+
             <button
-              onClick={() => navigate("/admin/users")}
-              className="nav-btn"
+              onClick={() => navigate("/createcause")}
+              className={btnClass}
             >
-              Users
+              Causes
             </button>
           </>
         )}
 
         <button
-          onClick={logout}
-          className="rounded-lg bg-red-500 px-4 py-2 text-white font-medium hover:bg-red-600"
+          onClick={handleLogout}
+          className="rounded-lg bg-red-500 px-4 py-2 text-white font-medium hover:bg-red-600 transition"
         >
           Logout
         </button>
