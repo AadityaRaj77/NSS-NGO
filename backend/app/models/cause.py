@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.sql import func
 from app.database import Base
+from sqlalchemy.orm import relationship
 
 class Cause(Base):
     __tablename__ = "causes"
@@ -15,3 +16,5 @@ class Cause(Base):
 
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    donations = relationship("Donation", back_populates="cause")

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { getCauses } from "../api/causes";
+import { createDonation, verifyDonation } from "../api/donations";
 
 type Cause = {
   id: number;
@@ -24,6 +25,28 @@ export default function Causes() {
       alert("Failed to load causes");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDonate = async (causeId: number) => {
+    const amountStr = prompt("Enter donation amount (₹)");
+    if (!amountStr) return;
+
+    const amount = Number(amountStr);
+    if (isNaN(amount) || amount <= 0) {
+      alert("Invalid amount");
+      return;
+    }
+
+    try {
+      const res = await createDonation(causeId, amount);
+      setTimeout(async () => {
+        await verifyDonation(res.data.donation_id, res.data.payment.payment_id);
+        alert("Donation successful");
+        fetchCauses();
+      }, 1500);
+    } catch (err) {
+      alert("Payment failed");
     }
   };
 
@@ -87,7 +110,7 @@ export default function Causes() {
 
               <button
                 disabled={!c.is_active}
-                onClick={() => alert("Payment flow coming next")}
+                onClick={() => handleDonate(c.id)}
                 className={`mt-5 w-full rounded-xl py-3 font-semibold text-white transition ${
                   c.is_active
                     ? "bg-orange-600 hover:bg-orange-700"
