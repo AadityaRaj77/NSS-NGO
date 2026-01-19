@@ -18,7 +18,7 @@ export default function Auth() {
         const me = await getMe();
 
         if (me.data.role === "ADMIN") navigate("/admin");
-        else navigate("/home");
+        else navigate("/causes");
       } else {
         await register(email, password, role, adminKey);
         alert("Registered successfully");

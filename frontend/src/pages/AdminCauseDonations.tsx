@@ -11,6 +11,7 @@ export default function AdminCauseDonations() {
   const [sort, setSort] = useState("date_desc");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [status, setStatus] = useState("");
 
   const fetchData = async () => {
     setLoading(true);
@@ -19,6 +20,7 @@ export default function AdminCauseDonations() {
         sort,
         from: from || undefined,
         to: to || undefined,
+        status: status || undefined,
       });
       setData(res.data);
     } catch {
@@ -30,19 +32,19 @@ export default function AdminCauseDonations() {
 
   useEffect(() => {
     fetchData();
-  }, [sort]);
+  }, [sort, status]);
 
   const exportCSV = () => {
     if (!data) return;
 
     const rows = data.donations.map(
       (d: any) =>
-        `${d.donor.name || ""},${d.donor.email},${d.amount},${new Date(
+        `${d.donor.name || ""},${d.donor.email},${d.amount},${d.status},${new Date(
           d.created_at,
         ).toLocaleString()}`,
     );
 
-    const csv = ["Name,Email,Amount,Date", ...rows].join("\n");
+    const csv = ["Name,Email,Amount,Status,Date", ...rows].join("\n");
 
     const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -66,7 +68,7 @@ export default function AdminCauseDonations() {
 
         {!loading && data && (
           <>
-            {/* SUMMARY */}
+            {/* Summary */}
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-xl bg-white p-4 shadow">
                 <p className="text-sm text-gray-500">Total Donations</p>
@@ -83,7 +85,7 @@ export default function AdminCauseDonations() {
               </div>
             </div>
 
-            {/* FILTERS */}
+            {/* Filters */}
             <div className="flex flex-wrap gap-3 items-end">
               <select
                 value={sort}
@@ -95,6 +97,16 @@ export default function AdminCauseDonations() {
                 <option value="amount_desc">Amount high → low</option>
                 <option value="amount_asc">Amount low → high</option>
                 <option value="name_asc">Name A → Z</option>
+              </select>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="rounded-lg border px-3 py-2"
+              >
+                <option value="">All statuses</option>
+                <option value="SUCCESS">SUCCESS</option>
+                <option value="FAILED">FAILED</option>
+                <option value="PENDING">PENDING</option>
               </select>
 
               <input
@@ -134,6 +146,7 @@ export default function AdminCauseDonations() {
                     <th className="px-4 py-3">Name</th>
                     <th className="px-4 py-3">Email</th>
                     <th className="px-4 py-3">Amount</th>
+                    <th className="px-4 py-3">Status</th> {/* ✅ ADDED */}
                     <th className="px-4 py-3">Date</th>
                   </tr>
                 </thead>
@@ -144,6 +157,22 @@ export default function AdminCauseDonations() {
                       <td className="px-4 py-3">{d.donor.name || "—"}</td>
                       <td className="px-4 py-3">{d.donor.email}</td>
                       <td className="px-4 py-3 font-semibold">₹{d.amount}</td>
+
+                      {/* ✅ STATUS BADGE */}
+                      <td className="px-4 py-3">
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            d.status === "SUCCESS"
+                              ? "bg-green-100 text-green-700"
+                              : d.status === "FAILED"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          {d.status}
+                        </span>
+                      </td>
+
                       <td className="px-4 py-3 text-gray-600">
                         {new Date(d.created_at).toLocaleString()}
                       </td>

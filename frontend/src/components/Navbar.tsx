@@ -26,13 +26,9 @@ export default function Navbar({ role }: Props) {
       </h1>
 
       <div className="flex items-center gap-6">
-        {/* USER NAV */}
+        {/* User Navbar */}
         {role === "USER" && (
           <>
-            <button onClick={() => navigate("/home")} className={btnClass}>
-              Home
-            </button>
-
             <button onClick={() => navigate("/causes")} className={btnClass}>
               Causes
             </button>
@@ -50,7 +46,7 @@ export default function Navbar({ role }: Props) {
           </>
         )}
 
-        {/* ADMIN NAV */}
+        {/* Admin Navbar*/}
         {role === "ADMIN" && (
           <>
             <button onClick={() => navigate("/admin")} className={btnClass}>

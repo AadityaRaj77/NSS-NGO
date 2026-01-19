@@ -11,7 +11,6 @@ router = APIRouter(prefix="/causes", tags=["causes"])
 async def list_causes(db: AsyncSession = Depends(get_db)):
     res = await db.execute(
         select(Cause)
-        .where(Cause.is_active == True)
         .order_by(Cause.created_at.desc())
     )
     return res.scalars().all()

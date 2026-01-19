@@ -6,6 +6,7 @@ export const getAdminCauseDonations = (
     from?: string;
     to?: string;
     sort?: string;
+    status?: string
   }
 ) =>
   axios.get(`/admin/causes/${causeId}/donations`, {

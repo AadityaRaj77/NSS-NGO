@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
-import UserHome from "./pages/UserHome";
 import RoleProtectedRoute from "./RoleProtectedRoute";
 import Profile from "./pages/Profile";
 import CreateCause from "./pages/CreateCause";
@@ -23,14 +22,6 @@ export default function App() {
           }
         />
 
-        <Route
-          path="/home"
-          element={
-            <RoleProtectedRoute allowed={["USER"]}>
-              <UserHome />
-            </RoleProtectedRoute>
-          }
-        />
         <Route
           path="/profile"
           element={

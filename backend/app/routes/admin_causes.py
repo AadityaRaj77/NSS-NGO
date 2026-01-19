@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -9,6 +9,7 @@ from app.models.donation import Donation
 from app.models.user import User
 from app.schemas.cause import CauseCreate, CauseUpdate
 from app.core.deps import require_admin
+from datetime import datetime
 
 router = APIRouter(prefix="/admin/causes", tags=["admin-causes"])
 
@@ -55,6 +56,10 @@ async def update_cause(
 @router.get("/{cause_id}/donations")
 async def admin_cause_donations(
     cause_id: int,
+    sort: str = Query("date_desc"),
+    from_date: datetime | None = Query(None, alias="from"),
+    to_date: datetime | None = Query(None, alias="to"),
+    status: str | None = Query(None),  # SUCCESS / FAILED / PENDING
     db: AsyncSession = Depends(get_db),
     admin: User = Depends(require_admin),
 ):
@@ -62,22 +67,41 @@ async def admin_cause_donations(
     if not cause:
         raise HTTPException(404, "Cause not found")
 
-    res = await db.execute(
+    query = (
         select(Donation)
         .where(Donation.cause_id == cause_id)
-        .options(
-            selectinload(Donation.user).selectinload(User.profile)
-        )
-        .order_by(Donation.created_at.desc())
+        .options(selectinload(Donation.user).selectinload(User.profile))
     )
 
-    donations = res.scalars().all()
-    success = [d for d in donations if d.status == "SUCCESS"]
+    # ---------- DATE FILTER ----------
+    if from_date:
+        query = query.where(Donation.created_at >= from_date)
+    if to_date:
+        query = query.where(Donation.created_at <= to_date)
 
+    # ---------- STATUS FILTER ----------
+    if status:
+        query = query.where(Donation.status == status)
+
+    # ---------- SORTING ----------
+    if sort == "date_asc":
+        query = query.order_by(Donation.created_at.asc())
+    elif sort == "amount_asc":
+        query = query.order_by(Donation.amount.asc())
+    elif sort == "amount_desc":
+        query = query.order_by(Donation.amount.desc())
+    elif sort == "name_asc":
+        query = query.join(Donation.user).join(User.profile).order_by(
+            User.profile.name.asc()
+        )
+    else:  # date_desc (default)
+        query = query.order_by(Donation.created_at.desc())
+
+    res = await db.execute(query)
+    donations = res.scalars().all()
+
+    success = [d for d in donations if d.status == "SUCCESS"]
     total_amount = sum(d.amount for d in success)
-    amount_distribution = {}
-    for d in success:
-        amount_distribution[d.amount] = amount_distribution.get(d.amount, 0) + 1
 
     return {
         "cause": {
@@ -88,7 +112,6 @@ async def admin_cause_donations(
         },
         "total_donations": len(success),
         "total_amount": total_amount,
-        "amount_distribution": amount_distribution,
         "donations": [
             {
                 "id": d.id,
