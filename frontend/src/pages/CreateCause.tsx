@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { createCause, listAdminCauses, updateCause } from "../api/adminCauses";
 
@@ -20,6 +21,7 @@ export default function CreateCause() {
     target_amount: "",
     deadline: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e: any) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -241,8 +243,12 @@ export default function CreateCause() {
                 ) : (
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-semibold text-lg">{c.title}</h3>
+                      <h3 className="font-semibold text-lg text-blue-900">
+                        {c.title}
+                      </h3>
+
                       <p className="text-sm text-gray-600">{c.description}</p>
+
                       <p className="text-xs text-gray-500 mt-1">
                         Target: ₹{c.target_amount}
                       </p>
@@ -256,6 +262,13 @@ export default function CreateCause() {
                       >
                         {c.is_active ? "ACTIVE" : "INACTIVE"}
                       </span>
+
+                      <button
+                        onClick={() => navigate(`/createcause/${c.id}`)}
+                        className="rounded-md bg-orange-600 px-3 py-1 text-sm text-white"
+                      >
+                        View Donations
+                      </button>
 
                       {c.is_active && (
                         <button

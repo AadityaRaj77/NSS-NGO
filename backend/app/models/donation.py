@@ -16,3 +16,4 @@ class Donation(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     cause = relationship("Cause", back_populates="donations")
+    user = relationship("User", back_populates="donations")

@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import CreateCause from "./pages/CreateCause";
 import Causes from "./pages/Causes";
 import MyDonations from "./pages/MyDonations";
+import AdminCauseDonations from "./pages/AdminCauseDonations";
 
 export default function App() {
   return (
@@ -59,6 +60,14 @@ export default function App() {
           element={
             <RoleProtectedRoute allowed={["USER"]}>
               <MyDonations />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/createcause/:causeId"
+          element={
+            <RoleProtectedRoute allowed={["ADMIN"]}>
+              <AdminCauseDonations />
             </RoleProtectedRoute>
           }
         />
