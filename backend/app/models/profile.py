@@ -12,8 +12,7 @@ class Profile(Base):
 
     name = Column(String, nullable=False)
     age = Column(Integer, nullable=True)
-    gender = Column(String, nullable=True)  # MALE | FEMALE | OTHER | PREFER_NOT_TO_SAY
-
+    gender = Column(String, nullable=True) 
     phone = Column(String, nullable=True)
     city = Column(String, nullable=True)
     state = Column(String, nullable=True)

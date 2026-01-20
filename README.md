@@ -1,7 +1,7 @@
 # NGO Registration and Donation Platform
 
-A full-stack NGO donation platform with **user donations**, **admin management**, **analytics**, and **auto-expiry of causes**.  
-Built for demonstration and academic evaluation using **sandbox payment flow** (no real money).
+An NGO registration and donation platform with **user donations**, **admin management**, **donation records**, and **auto-expiry of causes**.  
+Built for demonstration using **sandbox payment flow** (no real money).
 
 ## Features
 
@@ -18,20 +18,16 @@ Built for demonstration and academic evaluation using **sandbox payment flow** (
 - Create, update, and manage causes
 - Causes automatically **expire after deadline**
 - View **donors list per cause**
-- Donation analytics:
+- Donation analytics(per cause):
   - Total donations count
   - Total amount collected
-  - Amount distribution
+  - Amount distribution(planned but not implemented now)
 - Filters on donations:
   - Date range
   - Amount (asc/desc)
   - Name (A–Z)
   - Donation status (SUCCESS / FAILED / PENDING)
 - Export donations as **CSV**
-- Admin dashboard with:
-  - Active causes
-  - Total registrations
-  - Total donations
 
 #### Payment (Sandbox)
 
@@ -39,7 +35,7 @@ Built for demonstration and academic evaluation using **sandbox payment flow** (
 - Mocked payment flow:
   - Create donation → PENDING
   - Verify donation → SUCCESS / FAILED
-- Designed to be replaceable with Razorpay / Easebuzz live keys later
+- Designed to be replaceable with Razorpay live keys later
 
 ## Tech Stack
 
@@ -64,10 +60,11 @@ Built for demonstration and academic evaluation using **sandbox payment flow** (
 nss-ngo/
 ├── backend/
 │ ├── app/
-│ │ ├── models/ # SQLAlchemy models
-│ │ ├── routes/ # API routes
-│ │ ├── schemas/ # Pydantic schemas
-│ │ ├── services/ # Business logic
+│ │ ├── models/
+│ │ ├── routes/
+│ │ ├── schemas/
+│ │ ├── services/
+│ │ ├── utils/
 │ │ ├── core/
 │ │ │ ├── deps.py
 │ │ │ └── scheduler.py
@@ -80,8 +77,14 @@ nss-ngo/
 │ │ ├── api/
 │ │ ├── pages/
 │ │ ├── components/
-│ │ └── App.tsx
+│ │ ├── utils/
+│ │ │ └── token.ts
+│ │ ├── App.tsx
+│ │ └── main.tsx
 │ └── package.json
+│
+└── README.md
+
 ```
 
 ## Setup Instructions
@@ -151,13 +154,12 @@ npm install
 npm run dev
 ```
 
-Auto-Expire Logic
+## Auto-Expire Logic
 
 - APScheduler runs every minute
 - Automatically:
   - Finds causes where deadline < now
   - Marks them is_active = false
-
 - Expired causes:
   - Still visible to users
   - Donation disabled
