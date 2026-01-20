@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Auth from "./pages/Auth";
-import AdminDashboard from "./pages/AdminDashboard";
+//import AdminDashboard from "./pages/AdminDashboard";
 import RoleProtectedRoute from "./RoleProtectedRoute";
 import Profile from "./pages/Profile";
 import CreateCause from "./pages/CreateCause";
@@ -13,14 +13,14 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Auth />} />
-        <Route
+        {/*<Route
           path="/admin"
           element={
             <RoleProtectedRoute allowed={["ADMIN"]}>
               <AdminDashboard />
             </RoleProtectedRoute>
           }
-        />
+        />*/}
 
         <Route
           path="/profile"
@@ -31,7 +31,7 @@ export default function App() {
           }
         />
         <Route
-          path="/createcause"
+          path="/admin"
           element={
             <RoleProtectedRoute allowed={["ADMIN"]}>
               <CreateCause />

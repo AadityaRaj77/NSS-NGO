@@ -49,14 +49,11 @@ export default function Navbar({ role }: Props) {
         {/* Admin Navbar*/}
         {role === "ADMIN" && (
           <>
-            <button onClick={() => navigate("/admin")} className={btnClass}>
+            {/*<button onClick={() => navigate("/admin")} className={btnClass}>
               Dashboard
-            </button>
+            </button>*/}
 
-            <button
-              onClick={() => navigate("/createcause")}
-              className={btnClass}
-            >
+            <button onClick={() => navigate("/admin")} className={btnClass}>
               Causes
             </button>
           </>
