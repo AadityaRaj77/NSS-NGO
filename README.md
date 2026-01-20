@@ -1,7 +1,6 @@
 # NGO Registration and Donation Platform
 
-An NGO registration and donation platform with **user donations**, **admin management**, **donation records**, and **auto-expiry of causes**.  
-Built for demonstration using **sandbox payment flow** (no real money).
+An NGO registration and donation platform with **user donations**, **admin management**, **donation records**, and **auto-expiry of causes**. Built for demonstration using **sandbox payment flow** (no real money).
 
 ## Features
 
@@ -173,3 +172,8 @@ npm run dev
 - Status updated to SUCCESS
 - Cause collection amount updated
 - No real gateway, test cases only.
+
+## Video Demo and Project Report
+
+- Video Demo - https://drive.google.com/file/d/1E4_ZIFSQmzsZ6kFPIJkn3yc4dy8ftYNn/view?usp=sharing
+- Report - https://drive.google.com/file/d/14JywgQzyZBx8Xqec_d5yp7Tdw1-kc7LM/view?usp=sharing
