@@ -73,17 +73,14 @@ async def admin_cause_donations(
         .options(selectinload(Donation.user).selectinload(User.profile))
     )
 
-    # ---------- DATE FILTER ----------
     if from_date:
         query = query.where(Donation.created_at >= from_date)
     if to_date:
         query = query.where(Donation.created_at <= to_date)
 
-    # ---------- STATUS FILTER ----------
     if status:
         query = query.where(Donation.status == status)
 
-    # ---------- SORTING ----------
     if sort == "date_asc":
         query = query.order_by(Donation.created_at.asc())
     elif sort == "amount_asc":
@@ -94,7 +91,7 @@ async def admin_cause_donations(
         query = query.join(Donation.user).join(User.profile).order_by(
             User.profile.name.asc()
         )
-    else:  # date_desc (default)
+    else:  
         query = query.order_by(Donation.created_at.desc())
 
     res = await db.execute(query)

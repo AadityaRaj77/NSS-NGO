@@ -138,7 +138,7 @@ export default function AdminCauseDonations() {
               </button>
             </div>
 
-            {/* TABLE */}
+            {/* Table */}
             <div className="overflow-x-auto rounded-xl bg-white shadow">
               <table className="w-full text-sm">
                 <thead className="bg-gray-100 text-left">
@@ -158,7 +158,7 @@ export default function AdminCauseDonations() {
                       <td className="px-4 py-3">{d.donor.email}</td>
                       <td className="px-4 py-3 font-semibold">₹{d.amount}</td>
 
-                      {/* ✅ STATUS BADGE */}
+                      {/* Status */}
                       <td className="px-4 py-3">
                         <span
                           className={`rounded-full px-3 py-1 text-xs font-semibold ${

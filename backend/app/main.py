@@ -7,6 +7,7 @@ from app.routes import profile
 from app.routes import admin_causes
 from app.routes import causes
 from app.routes import donations
+from app.routes import admin_dashboard
 from app.core.scheduler import start_scheduler
 
 app = FastAPI()
@@ -24,6 +25,7 @@ app.include_router(profile.router)
 app.include_router(admin_causes.router)
 app.include_router(causes.router)
 app.include_router(donations.router)
+app.include_router(admin_dashboard.router)
 
 @app.on_event("startup")
 async def startup_event():
